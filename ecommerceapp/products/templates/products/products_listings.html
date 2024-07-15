@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Products Listings
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row mb-4 mt-4">
+            <div class="col-md-5">
+                <h5 class="mb-2">Sort Product By Price</h5>
+                <form>
+                    <div class="input-group">
+                        <span class="input-group-text">Min Price</span>
+                        <input type="number" id="min_price" name="min_price" value="{{ request.GET.min_price }}" class="form-control">
+                        <span class="input-group-text">Max Price</span>
+                        <input type="number" id="max_price" name="max_price" value="{{ request.GET.max_price }}" class="form-control">
+                        <div class="input-group-append ms-2">
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-4 mb-4">
+            {% for product in products %}
+            <div class="col">
+                <div class="card h-100">
+                    <img src="{{product.image.url}}" class="card-img-top" alt="{{product.name}}" style="height: 150px; object-fit: cover;">
+                    <div class="card-body">
+                        <h6 class="card-title">{{product.name}}</h6>
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text">Price: {{product.price}}</p>
+                            <a href="{% url 'product_details' product.id %}">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"  data-bs-target="#product-modal-{{ product.id }}">
+                                    View Description
+                                </button>
+                            </a>
+                        </div>
+                        <!-- Modal -->
+                        <div class="modal fade" id="product-modal-{{ product.id }}" tabindex="-1" aria-labelledby="product-modal-label-{{ product.id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="product-modal-label-{{ product.id }}">{{ product.name }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {{ product.description }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
